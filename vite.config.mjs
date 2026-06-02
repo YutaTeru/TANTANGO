@@ -5,7 +5,7 @@ import fs from 'fs'
 import path from 'path'
 
 const rootDir = process.cwd()
-const outDir = 'dist-unified'
+const outDir = 'dist'
 
 export default defineConfig({
   configFile: false,
@@ -24,8 +24,8 @@ export default defineConfig({
       name: 'copy-pwa-files',
       writeBundle() {
         try {
-              fs.copyFileSync('manifest.json', `${outDir}/manifest.json`)
-              fs.copyFileSync('sw.js', `${outDir}/sw.js`)
+          fs.copyFileSync('manifest.json', `${outDir}/manifest.json`)
+          fs.copyFileSync('sw.js', `${outDir}/sw.js`)
           console.log('PWA files copied successfully.')
         } catch (e) {
           console.error('Error copying PWA files:', e)
@@ -35,6 +35,6 @@ export default defineConfig({
   ],
   build: {
     outDir,
-    emptyOutDir: false,
+    emptyOutDir: true,
   },
 })
