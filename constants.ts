@@ -4,6 +4,7 @@ import { WORDS as RAW_EXJUN1 } from './exjun1';
 import { WORDS as RAW_TARGET_1400 } from './target1400';
 import { WORDS as RAW_TARGET_1900 } from './target1900';
 import { vocabularyList as MOYASHI_TARGET_1900 } from './moyashi-data/vocabulary';
+import { vocabularyList as SYSTAN } from './moyashi-data/systan';
 
 const rawKinHure = `1	anyway	とにかく
 2	following	～に続いて
@@ -465,6 +466,7 @@ const mapVocabularyItems = (items: VocabularyItem[]): Word[] => items.map(item =
 }));
 
 export const WORD_LIST_MOYASHI_TARGET1900: Word[] = mapVocabularyItems(MOYASHI_TARGET_1900);
+export const WORD_LIST_SYSTAN: Word[] = mapVocabularyItems(SYSTAN);
 
 export type DatasetKey =
   | 'kinhure'
@@ -472,7 +474,8 @@ export type DatasetKey =
   | 'exjun1'
   | 'target1400'
   | 'target1900'
-  | 'moyashiTarget1900';
+  | 'moyashiTarget1900'
+  | 'systan';
 
 export const DATASET_OPTIONS: DatasetKey[] = [
   'kinhure',
@@ -481,6 +484,7 @@ export const DATASET_OPTIONS: DatasetKey[] = [
   'target1400',
   'target1900',
   'moyashiTarget1900',
+  'systan',
 ];
 
 export const DATASETS: Record<DatasetKey, { label: string; words: Word[] }> = {
@@ -490,4 +494,5 @@ export const DATASETS: Record<DatasetKey, { label: string; words: Word[] }> = {
   target1400: { label: 'Target 1400', words: WORD_LIST_TARGET1400 },
   target1900: { label: 'Target 1900', words: WORD_LIST_TARGET1900 },
   moyashiTarget1900: { label: 'Moyashi Target 1900', words: WORD_LIST_MOYASHI_TARGET1900 },
+  systan: { label: 'シスタン', words: WORD_LIST_SYSTAN },
 };
