@@ -1,0 +1,6 @@
+﻿{
+  "name": "TANTANGO",
+  "description": "英単語カード、クイズ、単語リストで学習できる英単語アプリです。外部AI APIは使用しません。",
+  "requestFramePermissions": [],
+  "majorCapabilities": []
+}

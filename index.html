@@ -1,0 +1,147 @@
+
+<!DOCTYPE html>
+<html lang="ja">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1, user-scalable=no, viewport-fit=cover" />
+    <title>VocabMaster 単語帳</title>
+    
+    <!-- PWA Settings -->
+    <link rel="manifest" href="/manifest.json" />
+    <meta name="theme-color" content="#4f46e5" />
+    <meta name="apple-mobile-web-app-capable" content="yes" />
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent" />
+    <meta name="apple-mobile-web-app-title" content="VocabMaster" />
+    <meta name="mobile-web-app-capable" content="yes" />
+    <link rel="apple-touch-icon" href="https://cdn-icons-png.flaticon.com/512/3389/3389081.png" />
+
+    <link href="https://fonts.googleapis.com/css2?family=M+PLUS+Rounded+1c:wght@400;500;700;800&family=Inter:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+      body {
+        font-family: 'M PLUS Rounded 1c', sans-serif;
+        background-color: #fdfbf7;
+        background-image: radial-gradient(#e5e7eb 2px, transparent 2px);
+        background-size: 24px 24px;
+        -webkit-tap-highlight-color: transparent;
+        overscroll-behavior-y: none; /* 防止下拉刷新影響体験 */
+      }
+      .dark body {
+        background-color: #111827;
+        background-image: radial-gradient(#374151 2px, transparent 2px);
+      }
+      /* 3D Flip Utilities */
+      .perspective-1000 {
+        perspective: 1000px;
+      }
+      .transform-style-3d {
+        transform-style: preserve-3d;
+      }
+      .backface-hidden {
+        backface-visibility: hidden;
+      }
+      .rotate-y-180 {
+        transform: rotateY(180deg);
+      }
+      /* Custom Scrollbar - Cute & Round */
+      ::-webkit-scrollbar {
+        width: 12px;
+      }
+      ::-webkit-scrollbar-track {
+        background: transparent; 
+      }
+      ::-webkit-scrollbar-thumb {
+        background: #cbd5e1; 
+        border-radius: 99px;
+        border: 3px solid transparent;
+        background-clip: content-box;
+      }
+      ::-webkit-scrollbar-thumb:hover {
+        background-color: #94a3b8; 
+      }
+      /* Dark mode scrollbar overrides */
+      .dark ::-webkit-scrollbar-thumb {
+        background-color: #4b5563;
+      }
+      .dark ::-webkit-scrollbar-thumb:hover {
+        background-color: #6b7280;
+      }
+    </style>
+  </head>
+  <body>
+    <!-- Global Error Display overlay to catch early asset and load failures -->
+    <div id="global-error-display" style="display: none; position: fixed; top: 0; left: 0; right: 0; bottom: 0; background: rgba(255, 241, 242, 0.98); color: #be123c; border: 10px solid #f43f5e; font-family: monospace; z-index: 999999; font-size: 14px; overflow: auto; padding: 40px;">
+      <h1 style="margin: 0 0 20px 0; font-weight: 900; font-size: 24px; border-bottom: 2px solid #be123c; padding-bottom: 10px;">🚨 CRITICAL LOAD FAILURE</h1>
+      <p style="margin-bottom: 20px; font-weight: bold; font-size: 16px;">The application failed to start or encountered a fatal error during load.</p>
+      <div style="background: white; border: 1px dashed #be123c; padding: 20px; border-radius: 8px; margin-bottom: 20px;">
+        <h3 style="margin-top: 0;">Error Details:</h3>
+        <pre id="global-error-message" style="margin: 0; white-space: pre-wrap; word-break: break-all; font-family: monospace; line-height: 1.5; color: #111;"></pre>
+      </div>
+      <div style="display: flex; gap: 10px; flex-wrap: wrap;">
+        <button onclick="localStorage.clear(); sessionStorage.clear(); if ('caches' in window) { caches.keys().then((names) => { for (let name of names) caches.delete(name); }); } window.location.reload();" style="padding: 12px 24px; background: #be123c; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; box-shadow: 0 4px 0 0 #9f1239;">
+          💣 Full System Reset & Reload
+        </button>
+        <button onclick="window.location.reload();" style="padding: 12px 24px; background: #4f46e5; color: white; border: none; border-radius: 8px; cursor: pointer; font-weight: bold; font-size: 14px; box-shadow: 0 4px 0 0 #3730a3;">
+          🔄 Simple Reload
+        </button>
+      </div>
+      <p style="margin-top: 40px; color: #666; font-size: 12px;">If you see this, please check the developer console for more detailed logs.</p>
+    </div>
+
+    <div id="root">
+      <div style="display: flex; flex-direction: column; justify-content: center; align-items: center; height: 100vh; font-family: sans-serif; color: #666; gap: 20px;">
+        <div style="width: 48px; h-48 border-4 border-indigo-500 border-t-transparent rounded-full animate-spin"></div>
+        <div style="font-weight: bold; font-size: 18px;">Initializing VocabMaster...</div>
+        <div style="font-size: 12px; opacity: 0.7;">This may take a moment on first load.</div>
+      </div>
+    </div>
+    
+    <script>
+      // Early Error Tracker - Set as high up as possible
+      window.addEventListener('error', (event) => {
+        const errorEl = document.getElementById('global-error-display');
+        if (errorEl) {
+          errorEl.style.display = 'block';
+          const msgEl = document.getElementById('global-error-message');
+          if (msgEl) {
+            msgEl.innerText = `[Error] ${event.message}\nFile: ${event.filename}\nLine: ${event.lineno}:${event.colno}\nStack: ${event.error?.stack || 'Unavailable'}`;
+          }
+        }
+        console.error("BOOTSTRAP ERROR:", event);
+      });
+
+      window.addEventListener('unhandledrejection', (event) => {
+        const errorEl = document.getElementById('global-error-display');
+        if (errorEl) {
+          errorEl.style.display = 'block';
+          const msgEl = document.getElementById('global-error-message');
+          if (msgEl) {
+            msgEl.innerText = `[Promise Rejection] ${event.reason}\nStack: ${event.reason?.stack || 'Unavailable'}`;
+          }
+        }
+        console.error("BOOTSTRAP REJECTION:", event);
+      });
+      
+      console.log("Bootstrap sequence initiated - Listeners attached.");
+    </script>
+
+    <script type="module" src="/index.tsx"></script>
+    <script>
+      // Force fully clear client cache and unregister Service Worker to prevent caching deadlocks
+      if ('caches' in window) {
+        caches.keys().then((names) => {
+          for (let name of names) {
+            caches.delete(name);
+          }
+        });
+      }
+
+      if ('serviceWorker' in navigator) {
+        navigator.serviceWorker.getRegistrations().then((registrations) => {
+          for (let r of registrations) {
+            r.unregister();
+          }
+        });
+      }
+    </script>
+  </body>
+</html>
