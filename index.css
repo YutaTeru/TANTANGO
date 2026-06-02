@@ -1,0 +1,108 @@
+@import "tailwindcss";
+
+@theme {
+  --font-sans: "M PLUS Rounded 1c", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+
+  --shadow-pop: 4px 4px 0px 0px rgba(13, 148, 136, 0.16);
+  --shadow-pop-hover: 2px 2px 0px 0px rgba(13, 148, 136, 0.16);
+  --shadow-pop-bold: 6px 6px 0px 0px rgba(13, 148, 136, 0.24);
+}
+
+:root {
+  --study-bg: #f6fbf8;
+  --study-bg-spot: #fff7cc;
+  --study-surface: #ffffff;
+  --study-surface-soft: #ecfdf7;
+  --study-border: #99f6e4;
+  --study-border-strong: #0f766e;
+  --study-text: #102a43;
+  --study-muted: #526b69;
+  --study-accent: #0d9488;
+  --study-accent-strong: #0f766e;
+  --study-warm: #facc15;
+}
+
+@layer base {
+  body {
+    @apply antialiased;
+    color: var(--study-text);
+    background:
+      radial-gradient(circle at top left, rgba(250, 204, 21, 0.18), transparent 28rem),
+      linear-gradient(180deg, #fbfefc 0%, var(--study-bg) 42%, #eefaf5 100%);
+  }
+}
+
+@layer components {
+  .animate-fade-in {
+    animation: fadeIn 0.5s ease-out;
+  }
+  @keyframes fadeIn {
+    from { opacity: 0; }
+    to { opacity: 1; }
+  }
+}
+
+@layer utilities {
+  .border-gray-900 {
+    border-color: var(--study-border-strong) !important;
+  }
+
+  .border-gray-300,
+  .border-gray-200,
+  .border-gray-100 {
+    border-color: var(--study-border) !important;
+  }
+
+  .bg-gray-50 {
+    background-color: var(--study-surface-soft) !important;
+  }
+
+  .text-gray-300,
+  .text-gray-400,
+  .text-gray-500 {
+    color: var(--study-muted) !important;
+  }
+
+  .text-gray-600,
+  .text-gray-700,
+  .text-gray-800,
+  .text-gray-900 {
+    color: var(--study-text) !important;
+  }
+
+  .bg-indigo-500,
+  .bg-indigo-600,
+  .bg-sky-400,
+  .bg-emerald-500 {
+    background-color: var(--study-accent) !important;
+  }
+
+  .hover\:bg-indigo-600:hover,
+  .hover\:bg-indigo-700:hover,
+  .hover\:bg-sky-500:hover,
+  .hover\:bg-emerald-600:hover {
+    background-color: var(--study-accent-strong) !important;
+  }
+
+  .text-indigo-500,
+  .text-indigo-600,
+  .text-indigo-700,
+  .text-indigo-800,
+  .text-sky-600,
+  .text-emerald-600 {
+    color: var(--study-accent-strong) !important;
+  }
+
+  .border-indigo-500,
+  .border-indigo-600,
+  .border-indigo-700,
+  .border-sky-500,
+  .border-emerald-500 {
+    border-color: var(--study-accent-strong) !important;
+  }
+
+  .ring-indigo-500\/20 {
+    --tw-ring-color: rgba(13, 148, 136, 0.2) !important;
+  }
+}

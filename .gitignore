@@ -1,0 +1,15 @@
+node_modules/
+dist/
+dist-file/
+dist-themed/
+dist-unified/
+
+*.log
+*.out.log
+*.err.log
+
+before-python-marker.txt
+start-marker.txt
+
+.env
+.env.*
